@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AROUND TOWN </title>
+    <!-- Google Fonts (Chakra Petch) -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Chakra Petch', sans-serif;
+        }
+        body {
+            background-color: #0d0d0d;
+            color: #e4e4e4;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar ด้านซ้าย */
+        sidebar {
+            width: 300px;
+            background-color: #121212;
+            border-right: 1px solid #222;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            padding: 25px 15px;
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+            letter-spacing: 1px;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-list li {
+            margin-bottom: 12px;
+        }
+
+        /* หัวข้อหลักเมนูด้านซ้าย */
+        .menu-list > li > a {
+            text-decoration: none;
+            color: #cccccc;
+            font-size: 20px;
+            font-weight: 500;
+            display: block;
+            padding: 10px 12px;
+            border-radius: 6px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-list > li > a:hover, .menu-list > li > a.active {
+            color: #ffffff;
+            background-color: #1a1a1a;
+        }
+
+        /* หัวข้อย่อยใน Sidebar */
+        .submenu-list {
+            list-style: none;
+            padding-left: 18px;
+            margin-top: 6px;
+            border-left: 2px solid #262626;
+            display: none;
+        }
+
+        .menu-list li.open .submenu-list {
+            display: block;
+        }
+
+        .submenu-list li {
+            margin-bottom: 8px;
+        }
+
+        .submenu-list a {
+            text-decoration: none;
+            font-size: 19px;
+            color: #888888;
+            display: block;
+            padding: 6px 10px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .submenu-list a:hover, .submenu-list a.active {
+            color: #ff3333;
+            background-color: #161616;
+        }
+
+        /* เนื้อหาหลักด้านขวา */
+        .main-content {
+            margin-left: 300px;
+            flex: 1;
+            padding: 40px;
+            width: calc(100% - 300px);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* แบนเนอร์รูปภาพด้านบน */
+        .header-banner {
+            width: 100%;
+            height: 220px;
+            background-color: #161616;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid #242424;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .header-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+        }
+
+        /* กล่องคอนเทนต์หลัก ขยายเต็มตา */
+        .container {
+            width: 100%;
+            flex: 1;
+            background: #161616;
+            padding: 45px;
+            border-radius: 10px;
+            border: 1px solid #242424;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+
+        .sub-content-item {
+            display: none;
+        }
+        .sub-content-item.active {
+            display: block;
+        }
+
+        .header-section h2 {
+            font-size: 40px;
+            color: #f1f1f1;
+            margin-bottom: 35px;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .sub-header {
+            font-size: 30px;
+            color: #fffbfc;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .sub-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .rules-list {
+            list-style: none;
+            text-align: left;
+        }
+
+        .rules-list > li {
+            margin-bottom: 22px;
+            font-size: 22px;
+            line-height: 1.8;
+            color: #dedede;
+        }
+
+        .text-red {
+            color: #ff0000;
+            font-weight: normal;
+        }
+
+        /* สไตล์สำหรับพื้นที่สีแดงแบบ Dark Mode (เข้ากับเว็บ) */
+        .area-red-badge {
+            color: #ff4d4d;
+            background-color: rgba(255, 0, 0, 0.15);
+            border: 1px solid #ff4d4d;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .text-bold-dark {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .penalty-indent {
+            display: block;
+            margin-left: 22px;
+            margin-top: 4px;
+        }
+
+        .note-box {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-left: 4px solid #ff3333;
+            border-radius: 4px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #cccccc;
+        }
+
+        .hospital-notice {
+            margin-top: 40px;
+            padding: 22px;
+            background-color: #1c1c1c;
+            border: 1px solid #333;
+            border-left: 5px solid #ff0000;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .notice-black {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .notice-red {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff0000;
+            display: block;
+            line-height: 1.6;
+        }
+
+        @media(max-width: 992px) {
+            body {
+                flex-direction: column;
+            }
+            sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #222;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            .header-banner {
+                height: 150px;
+            }
+            .container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Sidebar เมนูด้านซ้าย -->
+    <sidebar>
+        <div class="sidebar-logo"> AROUND TOWN </div>
+        <ul class="menu-list">
+            <!-- 1. กฎโรงพยาบาล -->
+            <li id="menu-hospital-rules">
+                <a href="#" onclick="handleMenuClick('hospital-rules', this); return false;" class="active">กฎโรงพยาบาล</a>
+            </li>
+
+            <!-- เพิ่มใหม่: เขตพื้นที่ รพ. หมอ -->
+            <li id="menu-hospital-zones">
+                <a href="#" onclick="handleMenuClick('hospital-zones', this); return false;">เขตพื้นที่ รพ. หมอ</a>
+            </li> 
+
+            <!-- 2. กฎพื้นฐานแพทย์ -->
+            <li id="menu-doctor-basic">
+                <a href="#" onclick="handleMenuClick('doctor-basic', this, 'sub-basic-1', true); return false;">กฎพื้นฐานแพทย์</a>
+                <ul class="submenu-list">
+                    <li><a href="#" onclick="showSubSection('doctor-basic', 'sub-basic-1', this); return false;" class="active">วินัยและกฎระเบียบหน่วยงาน</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-basic', 'sub-basic-2', this); return false;">ข้อควรปฏิบัติขณะเข้าเวร</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-basic', 'sub-basic-3', this); return false;">ข้อห้ามปฏิบัติขณะเข้าเวร</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-basic', 'sub-basic-4', this); return false;">Operator [OP] (รันเคส)</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-basic', 'sub-basic-5', this); return false;">กฎระเบียบการแต่งกาย</a></li>
+                </ul>
+            </li>
+
+               <!-- เพิ่มใหม่: การแจ้งลา และแจ้งการลาออก -->
+            <li id="menu-leave-rule">
+                <a href="#" onclick="handleMenuClick('leave-rule', this, 'sub-leave-1', true); return false;">การแจ้งลา และแจ้งการลาออก</a>
+                <ul class="submenu-list">
+
+                </ul>
+            </li>
+         
+
+            <!-- 3. ขั้นตอนการทำงาน -->
+            <li id="menu-doctor-workflow">
+                <a href="#" onclick="handleMenuClick('doctor-workflow', this, 'sub-work-1', true); return false;">ขั้นตอนการทำงาน</a>
+                <ul class="submenu-list">
+                    <li><a href="#" onclick="showSubSection('doctor-workflow', 'sub-work-1', this); return false;" class="active">เคสทั่วไป</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-workflow', 'sub-work-2', this); return false;">เคสสุ่มเสี่ยง</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-workflow', 'sub-work-3', this); return false;">เคส สน.</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-workflow', 'sub-work-4', this); return false;">เคส สภา</a></li>
+                    <li><a href="#" onclick="showSubSection('doctor-workflow', 'sub-work-5', this); return false;"><span class="text-red">สตอรี่เถื่อน & ตีตัวหลุด</span></a></li>
+                </ul>
+            </li>
+
+            <!-- 4. การเรียกเคส -->
+            <li id="menu-call-case">
+                <a href="#" onclick="handleMenuClick('call-case', this); return false;">การเรียกเคส</a>
+            </li>
+
+            <!-- 5. Blacklist รพ. -->
+            <li id="menu-blacklist-hosp">
+                <a href="#" onclick="handleMenuClick('blacklist-hosp', this); return false;">กฎระเบียบ <span class="text-red">Blacklist</span> รพ.</a>
+            </li>
+
+            <!-- 6. กฎ Blacklist -->
+            <li id="menu-blacklist-rule">
+                <a href="#" onclick="handleMenuClick('blacklist-rule', this, 'sub-bl-1', true); return false;">กฎ <span class="text-red">Blacklist</span></a>
+                <ul class="submenu-list">
+                    <li><a href="#" onclick="showSubSection('blacklist-rule', 'sub-bl-1', this); return false;" class="active">ก่อกวนการทำงานแพทย์</a></li>
+                    <li><a href="#" onclick="showSubSection('blacklist-rule', 'sub-bl-2', this); return false;">ดูหมิ่นแพทย์</a></li>
+                    <li><a href="#" onclick="showSubSection('blacklist-rule', 'sub-bl-3', this); return false;">การทำร้ายร่างกายแพทย์</a></li>
+                </ul>
+            </li>
+
+            <!-- 7. อัตราค่ารักษา และ ห้องศัลยกรรม (รวมกัน) -->
+            <li id="menu-treatment-rate">
+                <a href="#" onclick="handleMenuClick('treatment-rate', this); return false;">อัตราค่ารักษา / การใช้ห้องศัลยกรรม</a>
+            </li>
+        </ul>
+    </sidebar>
+
+    <!-- พื้นที่แสดงเนื้อหาหลักด้านขวา -->
+    <div class="main-content">
+        
+        <!-- แบนเนอร์รูปภาพด้านบน -->
+        <div class="header-banner">
+            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1600&auto=format&fit=crop" alt="Banner Header">
+        </div>
+
+        <div class="container">
+            
+            <!-- 1. กฎโรงพยาบาล -->
+            <div id="hospital-rules" class="content-section active">
+                <div class="header-section">
+                    <h2>กฎโรงพยาบาล</h2>
+                </div>
+                <ul class="rules-list">
+                    <li><strong>1.</strong> โรงพยาบาลไม่สามารถให้ที่พักพิงสำหรับแก๊ง ครอบครัว หรือ ประชาชน (ที่มีสตอรี่ / สตอรี่เถื่อน) หากรักษาตัวเสร็จเรียบร้อยขอความกรุณาออกจากโรงพยาบาลทันที ภายใน 5 นาที</li>
+                    <li><strong>2.</strong> <span class="text-red">[ห้าม]</span> จอดรถกีดขวาง บริเวณพื้นที่เบิกรถแพทย์ และทาง เข้า - ออก โรงพยาบาล</li>
+                    <li><strong>3.</strong> <span class="text-red">[ห้าม]</span> ประชาชน แก๊ง ครอบครัว สวมใส่เครื่องแบบแพทย์และถุงมือแพทย์เป็นอันขาด หากพบเห็นจะถือว่าเป็นการปลอมแปลงเป็นเจ้าหน้าที่ หากตักเตือนแล้วไม่ปฏิบัติตาม จะมีความผิดตามกฏประเทศทันที</li>
+                    <li><strong>4.</strong> <span class="text-red">[ห้าม]</span> กระทำการใดๆ หรือแต่งกายในลักษณะอนาจาร ลามกอนาจาร หรือ สื่อไปในทางเพศที่ไม่เหมาะสม ภายในเขตพื้นที่โรงพยาบาลทุกกรณี [ขึ้นอยู่กับดุลยพินิจของแพทย์]</li>
+                    <li><strong>5.</strong> <span class="text-red">[ห้าม]</span> ก่อความวุ่นวายทางเสียง ex. บั้มรถ เบิ้ลรถ/เบิร์นยาง บริเวณหน้าโรงพยาบาล หรือใช้ soundpad , เปิดลำโพงเสียงดัง, บูสไมค์ เป็นต้น</li>
+                    <li><strong>6.</strong> <span class="text-red">[ห้าม]</span> กระทำการใดๆ ที่ทำให้แพทย์รู้สึกไม่ปลอดภัย เช่น ควักหรือถืออาวุธ, ปิดบังใบหน้า ใส่หน้ากากผ้าปิดจมูก แฟชั่นที่ปิดบังใบหน้า</li>
+                    <li><strong>7.</strong> วงเคอร์ฟิวของแพทย์สามารถใช้ได้แค่ในพื้นที่สตอรี่ และทะเลาะวิวาทเท่านั้น</li>
+                    <li><strong>8.</strong> ผู้ที่ติด <span class="text-red">Blacklist</span> โรงพยาบาล แพทย์จะไม่ทำการรักษาให้ทุกกรณี จนกว่าจะมาเสียค่าปรับ <span class="text-red">Blacklist</span></li>
+                    <li><strong>9.</strong> เขตพื้นที่โรงพยาบาล(Safezone) ถือเป็นพื้นที่ปลอดภัยในทุกกรณี ไม่อนุญาตให้มีการก่อความรุนแรง ทะเลาะวิวาท (ทั้งวาจาและทำร้ายร่างกาย) หรือกระทำผิดกฎหมายใดๆ ทั้งสิ้น</li>
+                    <li><strong>10.</strong> หากพบเห็นการปฏิบัติงานที่ผิดพลาดร้ายแรงของแพทย์ และต้องการร้องเรียน ให้ผู้ร้องเรียนรวบรวมและแนบหลักฐานที่ชัดเจน เช่น Gopro Overlay หรือ ภาพถ่าย F12 ให้กับทางแพทย์ยศสูง ณ เวลานั้น</li>
+                    <li><strong>11.</strong> การตัดสินใจของแพทย์และสายตาของแพทย์ถือเป็นที่สิ้นสุด ยกเว้น ถนนเส้นหน้าโรงพยาบาล (บริเวณก่อนถึงสะพาน - ปั้ม)</li>
+                    <li><strong>12.</strong> การหาช่องโหว่ของกฎ การบิดเบือนเจตนาของกฎ หรือการอ้างว่ากฎไม่ได้ระบุไว้โดยตรง เพื่อหลีกเลี่ยงความผิด ให้ถือว่าเป็นการฝ่าฝืนกฎเช่นเดียวกัน</li>
+                    <li><strong>13.</strong> การตีความกฎ และการพิจารณาความผิด ถือเป็นดุลยพินิจของ ผอ.แพทย์ และ รอง ผอ.โดยอ้างอิงจากหลักฐานที่มีในขณะนั้น คำตัดสินถือเป็นที่สิ้นสุด</li>
+                    <li><strong>14.</strong> การรับเคสนอกก่อนประเทศไฟดับ : โรงพยาบาลจะงดรับเคสนอกก่อนประเทศไฟดับ 15 นาที หากมีการเรียกเคสเข้ามาก่อนเวลา xx.45 แพทย์จะดำเนินการตามขั้นตอนปกติ</li>
+                </ul>
+
+                 <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+                    เขตโรงพยาบาลถือเป็นพื้นที่ของแพทย์ หากแพทย์ขอความร่วมมือโปรดทำตาม
+(หากไม่ปฏิบัติตามแพทย์จะลงโทษ Blacklist ตามหัวข้อนั้นๆ)
+                </div>
+            </div>
+           
+            <!-- เขตพื้นที่ รพ. หมอ -->
+<div id="hospital-zones" class="content-section" style="display: none;">
+    <div class="header-section">
+        <h2> เขตพื้นที่ รพ. หมอ </h2>
+    </div>
+    
+    <!-- ส่วนสำหรับใส่รูปภาพแผนที่/เขตพื้นที่ -->
+    <div style="text-align: center; margin-top: 20px;">
+        <img src="ชื่อไฟล์รูปภาพของคุณ.png" alt="เขตพื้นที่ รพ. หมอ" style="width: 100%; max-width: 800px; border-radius: 8px; border: 2px solid #444; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+    </div>
+
+    <!-- ข้อความคำอธิบายเพิ่มเติมใต้รูปภาพ (ถ้ามี) -->
+    <ul class="rules-list" style="margin-top: 30px;">
+        <li>
+            <strong>หมายเหตุ :</strong> <span class="text-red" style="font-weight: normal;">กรุณาศึกษาและทำความเข้าใจเขตพื้นที่รับผิดชอบและเขตปลอดภัยของโรงพยาบาลอย่างเคร่งครัด</span>
+        </li>
+    </ul>
+</div>
+
+
+           <!-- 2. กฎพื้นฐานแพทย์ -->
+<div id="doctor-basic" class="content-section">
+    <div class="header-section">
+        <h2>กฎพื้นฐานแพทย์</h2>
+    </div>
+    <div id="sub-basic-1" class="sub-content-item active">
+        <div class="sub-header">วินัยและกฎระเบียบของหน่วยงานแพทย์</div>
+        <ul class="rules-list">
+            <li><strong>1.</strong> แพทย์ต้องมีใจรักการบริการ มีความซื่อสัตย์ในการทำงาน อดทนต่อความกดดันต่าง ๆ และแก้ไขสถานการณ์เฉพาะหน้าได้</li>
+            <li><strong>2.</strong> แพทย์ต้องมีมนุษย์สัมพันธ์ที่ดีต่อผู้อื่น พูดจาสุภาพ พูดคุยกับเพื่อนร่วมงาน แก๊ง ครอบครัว ประชาชน และหน่วยงานอื่นๆ ควบคุมอารมณ์ได้ มีเหตุผลเป็นกลาง ไม่หาเรื่องหรือทะเลาะกับบุคคลอื่น</li>
+            <li><strong>3.</strong> แพทย์จำเป็นที่ต้องรู้กฎพื้นฐานของโรงพยาบาล กฎประเทศ และปฏิบัติตามกฎระเบียบได้อย่างถูกต้อง </li>
+            <li><strong>4.</strong> แพทย์ต้องมีความกระตือรือร้น พร้อมเรียนรู้อานและสิ่งใหม่ ๆ อยู่เสมอ รับผิดชอบต่อหน้าที่ ไม่ละทิ้งหน้าที่ และไม่เลือกปฏิบัติ และปฏิบัติหน้าที่ให้ถึงที่ที่สุด </li>
+            <li><strong>5.</strong> แพทย์จะต้องเคารพและให้เกียรติซึ่งกันและกัน ไม่เอาเปรียบผู้อื่น สามารถทำงานร่วมกับผู้อื่นได้เป็นอย่างดี</li>
+            <li><strong>6.</strong> หน่วยงานแพทย์ไม่สามารถมีสตอรี่ได้ หากแพทย์มีสตอรี่ทางโรงพยาบาลจะให้พักงานเพื่อไปเคลียร์สตอรี่</li>
+            <li><strong>7.</strong> ประชาชนที่ออกจาก ครอบครัว หรือแก๊ง ต้องรอให้ครบ cooldown 3 วัน ก่อนสมัครเข้าหน่วยงานแพทย์</li>
+        </ul>
+    </div>
+    <div id="sub-basic-2" class="sub-content-item">
+        <div class="sub-header">ข้อควรปฏิบัติขณะเข้าเวร</div>
+        <ul class="rules-list">
+            <li>
+           <li>
+            <strong>1.</strong> ต้องใส่ [ARMD] หน้าชื่อ Steam และ Discord เช่น [ARMD] Around Town ทุกครั้งที่เข้าเวร
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>2.</strong> ต้องเข้าวิทยุสื่อสาร และแจ้งเข้าวอ เข้าเวร ทุกครั้ง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        <li>
+            <strong>3.</strong> กรณีเหม่อ ต้องแจ้งในวอก่อนทุกครั้ง หากไม่ได้ทำการแจ้ง จะโดนโทษวินัย หากมีการขานเรียกในวอ และไม่ตอบสนองเกิน 2 ครั้งที่เรียก จะถือว่าเป็นการเหม่อโดยที่ไม่ได้ไม่แจ้งเหม่อ
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>4.</strong> สามารถเหม่อได้สูงสุดไม่เกิน 20 นาที หากเหม่อจนสลบหรือ เกินกว่า 20 นาที ให้ ตม. ทุกครั้ง (หากมีแพทย์ไม่ถึง 5 คน เหม่อได้ไม่เกิน 10 นาที)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>5.</strong> ออกไปรับเคส ให้เปิดไซเรนตั้งแต่โรงพยาบาลทุกครั้ง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>6.</strong> สามารถใช้ภาพถ่ายจากกล้องติดตัว [Gopro, Overlay, F12, Screenshot] เป็นหลักฐานได้
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ตักเตือน</span>
+        </li>
+        <li>
+            <strong>7.</strong> การลางาน ต้องแจ้งลาใน Discord หน่วยงานทุกครั้ง (ห้องแจ้งลา)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>8.</strong> แพทย์ที่เข้าเวรคนแรกให้ประกาศเปิดโรงพยาบาล / ออกเวรคนสุดท้ายให้ประกาศปิดโรงพยาบาล
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>9.</strong> เมื่อแพทย์ทำการออกเวรแล้ว ต้องถอดชุดหน่วยงานแพทย์ทุกครั้ง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>10.</strong> รถหน่วยงานแพทย์ทุกคัน ไม่สามารถใช้ฟิล์มดำ หรือทึบได้ ให้ใช้ฟิล์มใสที่มองเห็นตัวได้เท่านั้น
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>11.</strong> แพทย์สามารถตรวจสอบบัตรประจำตัวประชาชนของคนไข้ได้เพื่อวัตถุประสงค์ในการปฏิบัติงานเท่านั้น [ห้าม] นำข้อมูลดังกล่าวไปใช้ในทางที่ผิด หรือนำไปเปิดเผยต่อบุคคลภายนอกโดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ใบแดง 🟥 + ปลดออกจากหน่วยงาน</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> ขึ้นอยู่กับการกระทำความผิด
+            </div>
+        </li>
+        <li>
+            <strong>12.</strong> หากอยู่ในประเทศ เวลา 20:00 - 00:00 น. จะต้องเข้าเวรทุกครั้ง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + บำเพ็ญ 50 ไม้</span>
+        </li>
+        <li>
+            <strong>13.</strong> หากแพทย์จะไปทำธุระส่วนตัว (ยกเว้นเรเบล) จะต้องนำรถหน่วยงานแพทย์ไปด้วยทุกครั้ง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>14.</strong> หากเจอปัญหาหน้างานไม่สามารถแก้ปัญหาได้จะต้องแจ้งแพทย์ที่ยศสูงกว่าทุกครั้ง ห้ามตัดสินใจเองโดยพลการ
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>15.</strong> หากแพทย์ทำงานผิดพลาด ทำให้เกิดข้อผิดพลาดในการปฏิบัติหน้าที่ ต่อตนเองและผู้อื่น หรืออ้างว่าไม่ทราบกฎแพทย์
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 500,000 + บำเพ็ญ 50 ไม้</span>
+        </li>
+        <li>
+            <strong>16.</strong> ระบบส่งตัว สามารถใช้ได้เฉพาะประชาชน ครอบครัว หรือแก๊งที่มีสตอรี่เถื่อนเท่านั้น
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>17.</strong> [สำคัญ] 
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+                <li>17.1 แพทย์จะต้องรับผิดชอบเคสที่ได้รับให้ถึงที่สุด ห้ามละเลยการปฏิบัติหน้าที่</li>
+                <li>17.2 เคสทั่วไป หากแพทย์ไม่พบผู้สลบ ควรทำตามขั้นตอนการทำงานของแพทย์จนถึงที่สุด</li>
+                <li>17.3 เคสทะเลาะวิวาท หรือ สตอรี่เถื่อน แพทย์จะต้องนำตัวผู้สลบกลับมาชุบที่โรงพยาบาลตามขั้นตอนการทำงานของแพทย์เท่านั้น ไม่มีข้อยกเว้น</li>
+            </ul>
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 500,000 + ตักเตือน</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> หากแพทย์ละเลยหน้าที่ ไม่ว่าจะด้วยเหตุผลอะไรก็ตาม จนไม่สามารถทำการรักษาชีวิตคนไข้ได้ จนถูกร้องเรียนจากผู้สลบ จะถือว่าแพทย์ได้ทำผิดวินัยร้ายแรง
+            </div>
+        </li>
+        <li>
+            <strong>18.</strong> แพทย์ต้องรักชีวิตตนเอง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>19.</strong> แพทย์ทุกยศสามารถซื้อ-ขายของงานขาว ขณะเข้าเวร รวมไปถึงปล่อยเช่ารถ และแฟชั่น ห้ามปล่อยเช่ารถให้กับแก๊ง ครอบครัวและประชาชนที่มีสตอรี่ ไม่ว่าจะออกเวรหรือลาพักร้อน (แพทย์ดำ)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ใบแดง 🟥 + ปลดออกจากหน่วยงาน</span>
+        </li>
+        <li>
+            <strong>20.</strong> แพทย์สามารถฉีดยานอกสถานที่ได้เฉพาะ ประชาชน ครอบครัว หรือแก๊ง ที่ไม่มีสตอรี่ / สตอรี่เถื่อน
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน / ครั้ง</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> สตอรี่เถื่อน หรือ ใส่ปลอกแขนสตอรี่สีเขียวเลม่อน ฉีดไม่ได้ / ปลอกแขนสีแดงสตอรี่ ฉีดได้
+            </div>
+        </li>
+        <li>
+            <strong>21.</strong> ใน 7 วันแรกที่เข้าทำงานจะนับว่าเป็นช่วงทดลองงาน จะไม่สามารถออกเวรและลาได้ทุกกรณี การเข้าเวรจะสามารถเข้าได้ต่อเมื่อ มีแพทย์ 2 คนขึ้นไปเท่านั้น
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> ในระยะเวลาที่ทดลองงาน ทางโรงพยาบาลให้สิทธิ์ในการตัดสินใจว่าจะร่วมงานต่อหรือขอลาออก หากแจ้งลาออกในช่วงทดลองงาน จะไม่มีการปรับ หรือลงโทษใดๆ
+            </div>
+        </li>
+        <li>
+            <strong>22.</strong> เคสสตอรี่เถื่อน แพทย์เจ้าของเคส ต้องเปิดวงเคอร์ฟิวทุกครั้งที่เข้าพื้นที่ และ ปิดวงเคอร์ฟิวทุกครั้งหลังปฏิบัติหน้าที่เสร็จ
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        </ul>
+    </div>
+    <div id="sub-basic-3" class="sub-content-item">
+        <div class="sub-header">ข้อห้ามปฏิบัติขณะเข้าเวร</div>
+        <ul class="rules-list">
+        <li>
+            <strong>1.</strong> <span class="text-red">[ห้าม]</span> ละทิ้งหน้าที่เพื่อไป (ฟาร์มงานขาว) หรือเข้าร่วมกิจกรรมต่างๆ ในขณะที่กำลังเข้าเวรโดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>2.</strong> <span class="text-red">[ห้าม]</span> นำยานพาหนะของหน่วยงานทุกประเภทไปใช้งานในกรณีที่ไม่จำเป็น ex. นำไปรับผู้เล่น ทำเควสรายวัน ขับรถเล่น [ยกเว้นได้รับอนุญาต]
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>3.</strong> <span class="text-red">[ห้าม]</span> ปล่อยให้ยานพาหนะของหน่วยงานหลุดหาย สูญหาย หรือเสียหายจากการละเลยในขณะปฏิบัติหน้าที่โดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 500,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>4.</strong> <span class="text-red">[ห้าม]</span>โพสต์ประกาศซื้อขาย แลกเปลี่ยน หรือทำธุรกรรมเกี่ยวกับสิ่งผิดกฎหมายใดๆ ในขณะที่กำลังเข้าเวรโดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ใบแดง 🟥 + ปลดออกจากหน่วยงาน</span>
+        </li>
+        <li>
+            <strong>5.</strong> <span class="text-red">[ห้าม]</span>ทำงานดำขณะเข้าเวร (ต้องออกเวรก่อนและจะโดนบิลจากทางตำรวจ x2)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 300,000 + บำเพ็ญ 100 ไม้</span>
+        </li>
+        <li>
+            <strong>6.</strong> <span class="text-red">[ห้าม]</span> อุ้มแพทย์ด้วยกัน / ประชาชน / ครอบครัว / แก๊ง / หน่วยงานอื่น หรือใช้อิโมตใดๆ ที่ไม่เหมาะสมขณะเข้าเวรโดยเด็ดขาด (ยกเว้นเหตุจำเป็นและได้รับอนุญาต) (ตักเตือน 1 ครั้ง)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>7.</strong> <span class="text-red">[ห้าม]</span> ใช้ยานพาหนะส่วนตัวในการออกไปปฏิบัติหน้าที่รับเคสโดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>8.</strong> <span class="text-red">[ห้าม]</span> ออกไปรับเคส หรือปฏิบัติหน้าที่ในกรณีที่ไม่มีการส่งข้อความขอความช่วยเหลือผ่านระบบอย่างเป็นทางการ เช่น การรับส่งพิกัด GPS ส่วนตัว หรือการร้องขอให้ไปทำการรักษานอกสถานที่โดยไม่มีการแจ้งเคสผ่าน Tablet (F4) โดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 300,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>9.</strong> <span class="text-red">[ห้าม]</span> ใส่บิลเพื่อความสนุกสนาน ล้อเล่น หรือโดยไม่มีการรักษาเกิดขึ้นจริงโดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : X2 ของราคาบิล + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>10.</strong> <span class="text-red">[ห้าม]</span> พาบุคคลภายนอกที่ไม่ใช่หน่วยงานแพทย์ เข้าไปในพื้นที่ส่วนบุคคล หรือพื้นที่จำกัดสิทธิ์ภายในหน่วยงานโดยเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 500,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>11.</strong> <span class="text-red">[ห้าม]</span> ใช้ถ้อยคำที่ไม่เหมาะสม หยาบคาย หรือไม่สุภาพต่อประชาชน การร้องเรียนในกรณีดังกล่าว ประชาชนผู้เสียหายจะต้องมีหลักฐานประกอบการแจ้งเรื่องร้องเรียนอย่างชัดเจน และสมบูรณ์
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 500,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>12.</strong> <span class="text-red">[ห้าม]</span> รับ-ส่ง ประชาชน ครอบครัว หรือแก๊ง ที่มีสตอรี่ทุกกรณี ยกเว้น กรณีเป็นประชาชนที่ไม่มีสตอรี่ ที่ได้ทำการกดเรียกเคสมาเท่านั้น จึงสามารถทำการ รับ-ส่งได้
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 300,000 + ตักเตือน</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> ส่งได้ที่พาวใกล้ๆ หรือ โรงพยาบาลเท่านั้น
+            </div>
+        </li>
+        <li>
+            <strong>13.</strong> <span class="text-red">[ห้าม]</span> เปิดให้บริการห้องศัลยกรรมแก่ประชาชน ครอบครัว หรือแก๊งที่มี (Story) เกี่ยวข้องโดยเด็ดขาด (แพทย์ดำ)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ใบแดง 🟥 + ปลดออกจากหน่วยงาน</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> หากช่วยเหลือจะเข้าข่ายแพทย์ดำทันที
+            </div>
+        </li>
+        <li>
+            <strong>14.</strong> <span class="text-red">[ห้าม]</span> ออกปฏิบัติหน้าที่รับเคสร่วมกันเกิน 2 คน ยกเว้น ในกรณีดังต่อไปนี้เท่านั้น
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px; color: #ccc;">
+                <li>การปฏิบัติงานร่วมกันระหว่างแพทย์ใหม่และพี่เลี้ยง</li>
+                <li>กรณีที่ระบบคอมพิวเตอร์ หรือสัญญาณอินเทอร์เน็ตของแพทย์ท่านนั้นมีปัญหาขัดข้องอย่างรุนแรง</li>
+                <li>กรณีมีเคสสตอรี่เถื่อน หรือ สตอรี่ตีตัวหลุด</li>
+            </ul>
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>15.</strong> <span class="text-red">[ห้าม]</span> นำบุคคลภายนอก (บุคคลอื่นที่ไม่ใช่หน่วยงานผู้มีหน้าที่รับผิดชอบโดยตรง) ร่วมเดินทางไปรับเคสในทุกกรณีอย่างเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ใบเหลือง 🟨 พิจารณาตามดุลยพินิจของแอดมิน</span>
+        </li>
+        <li>
+            <strong>16.</strong> <span class="text-red">[ห้าม]</span> สร้างความขัดแย้ง ยุยงปลุกปั่นภายในหน่วยงานเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 1,000,000 + ปลดออกหน่วยงาน</span>
+        </li>
+        <li>
+            <strong>17.</strong> <span class="text-red">[ห้าม]</span> มีความสัมพันธ์ส่วนตัวที่ส่งผลเสียต่อการปฏิบัติงาน หรือทำให้เกิดความบกพร่องในหน้าที่ความรับผิดชอบอย่างเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 1,000,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>18.</strong> <span class="text-red">[ห้าม]</span> ไปทำธุระที่เรเบล โดยที่ไม่ออกเวร ไม่ถอดชุดแพทย์ และถุงมือ รวมไปถึงการนำรถแพทย์เดินทางไปเรเบลเพื่อไปใช้ส่วนตัว
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + บำเพ็ญ 20 ไม้</span>
+        </li>
+        <li>
+            <strong>19.</strong> <span class="text-red">[ห้าม]</span> ให้ข้อมูลผิดๆ กับแพทย์ท่านอื่น เพราะอาจส่งผลกระทบถึงการทำงานของแพทย์ท่านอื่นได้
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 100,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>20.</strong> <span class="text-red">[ห้าม]</span> แพทย์ให้ความช่วยเหลือประชาชน ครอบครัว หรือแก๊งที่มีสตอรี่ (แพทย์ดำ)
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ใบแดง 🟥 + ปลดออกจากหน่วยงาน</span>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> หากช่วยเหลือจะเข้าข่ายแพทย์ดำทันที
+            </div>
+        </li>
+        <li>
+            <strong>21.</strong> <span class="text-red">[ห้าม]</span> แพทย์เปิดวงเคอร์ฟิวเล่นเด็ดขาด
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 300,000 + บำเพ็ญ 20 ไม้</span>
+        </li>
+        </ul>
+    </div>
+
+    
+  <div id="sub-basic-4" class="sub-content-item">
+    <div class="sub-header">Operator [OP] รันเคส</div>
+    <ul class="rules-list">
+        <li><strong>1.</strong> OP จะเริ่มรันคิวก็ต่อเมื่อมีแพทย์เข้าเวร 6 คนขึ้นไป</li>
+        <li><strong>2.</strong> OP ต้องส่งหลักฐานการรันเคสลงในห้อง Discord ทุกครั้ง เพื่อประโยชน์ในการรับเงินโบนัส OP ของตัวเอง</li>
+        <li><strong>3.</strong> ทุกครั้งที่แพทย์เข้าเวร สามารถแจ้งเข้าคิว OP ได้เลย</li>
+        <li><strong>4.</strong> หากยังไม่ถึงเคสตัวเองที่ OP เรียกชื่อ รบกวนไม่กดรับเคส และไม่มั่วเคสกัน</li>
+        <li><strong>5.</strong> หาก OP เรียกชื่อตัวเองรบกวนตอบกลับในวอเสมอ เช่น รับเคสค่ะ โอเคครับ</li>
+        <li><strong>6.</strong> หากเคลียร์เคสแล้วรบกวนบอกในวอเสมอ เช่น เคลียร์เคสค่ะ/ครับ, เคส(ชื่อตัวเอง)เคลียร์ค่ะ/ครับ</li>
+        <li><strong>7.</strong> หากใครที่เข้าเวรหรือออกเวรรบกวนบอกในวอด้วยเสมอ เช่น (ชื่อตัวเอง)เข้าเวรเข้าวอค่ะ/ครับ, (ชื่อตัวเอง)ออกเวรออกวอค่ะ/ครับ</li>
+        
+    </ul>
+</div>
+    <div id="sub-basic-5" class="sub-content-item">
+        <div class="sub-header">กฎระเบียบการแต่งกาย</div>
+        <ul class="rules-list">
+            <li>
+            <strong>1.</strong> วันธรรมดา (จันทร์ - พฤหัส) แพทย์จะต้องสวมเครื่องแบบแพทย์ในขณะที่เข้าเวรทุกครั้ง 
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        <li>
+            <strong>2.</strong> วัน Free day (ศุกร์, เสาร์, อาทิตย์) แพทย์สามารถแต่งกายตามอัธยาศัยได้ แต่ต้องสุภาพ เรียบร้อย และสวมถุงมือสีฟ้าด้วยทุกครั้ง
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : 50,000 + ตักเตือน</span>
+        </li>
+        </ul>
+    </div>
+</div>
+
+<!-- การแจ้งลา และแจ้งการลาออก -->
+<div id="leave-rule" class="content-section">
+    <div class="header-section">
+        <h2>การแจ้งลา และแจ้งการลาออก</h2>
+    </div>
+    <ul class="rules-list">
+        <li>
+            <strong>1.</strong> วันลา: สามารถลาได้ 8 วัน / 1 เดือน
+        </li>
+        <li>
+            <strong>2.</strong> ชั่วโมงการเข้าเวร: ขั้นต่ำ 21 ชม. / 1 สัปดาห์ <span style="color: #fc0404; font-weight: normal;">หากแพทย์เข้าเวรไม่ถึงชั่วโมงขั้นต่ำ จะถูกปรับ 100,000</span> 
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ:</strong> หากไม่เสียค่าปรับภายในวัน-เวลาที่กำหนด จะมีการเพิ่มโทษ บำเพ็ญ 50 และหากยังไม่จ่ายค่าปรับ ทางโรงพยาบาลจะทำการเรียกพบส่วนตัว หากไม่ให้ความร่วมมือ จะถูกปลดไวริสแพทย์ และดำเนินโทษตามกฎข้อ 33
+            </div>
+        </li>
+        <li>
+            <strong>3.</strong> แพทย์บรรจุใหม่: ต้องอยู่ให้ครบ 30 วัน นับตั้งแต่วันที่ได้รับการแต่งตั้ง หากลาออกหรือจงใจทำผิดเพื่อให้ถูกไล่อออกก่อนครบกำหนด <span style="color: #fc0404; font-weight: normal;">จะถูกปรับ 100,000</span>  
+            หากปฏิเสธการจ่ายค่าปรับ หลบหนี กดออก Discord หรือเปลี่ยนชื่อเพื่อเลี่ยงการจ่าย <span style="color: #fc0404; font-weight: normal;">จะดำเนินการรีตัวละครทุกกรณี โดยไม่มีข้อยกเว้น และติดคลูดาวน์ 7 วัน</span> 
+        </li>
+        <li>
+            <strong>4.</strong> กรณีที่อยู่ครบ 1 เดือนแล้วจะลาออก: จะต้องมีชั่วโมงในการทำงานครบ 90 ชั่วโมง ถึงจะสามารถออกได้ (ไม่นับวันลา) และมีระยะเวลาคลูดาวน์เข้าหน่วยงานอื่น หรือครอบครัว แก๊ง เป็นระยะเวลา 3 วัน
+        </li>
+        <li>
+            <strong>5.1</strong> กรณีการขาดงาน: หากมีการขาดงานโดยไม่มีการแจ้งลา จะโดนโทษวินัย 
+          <span style="color: #fc0404; font-weight: normal;">ตักเตือน + เสียค่าปรับ 100,000 / 1 วันที่ไม่ได้แจ้งลา</span> 
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ:</strong> หากไม่เสียค่าปรับภายในวัน-เวลาที่กำหนด จะมีการเพิ่มโทษ บำเพ็ญ 50 และหากยังไม่จ่ายค่าปรับ จะถูกปลดไวริสแพทย์และลงโทษตามกฎข้อ 35.2
+            </div>
+        </li>
+        <li>
+            <strong>5.2</strong> กรณีขาดงานติดต่อกัน 7 วัน: โดยไม่มีการแจ้งลา หรือหายไปเลย จะโดนระงับไวริสหน่วยงานแพทย์ทันที และแพทย์จะลงโทษตามความผิดหัวข้อการแจ้งลาและการลาออกข้อที่ 36 หากทำผิดวินัยแพทย์เกิน 3 ครั้งในเรื่องเดิม จะถูกปลดออกจากหน่วยงานแพทย์ทันที
+        </li>
+        <li>
+            <strong>6.</strong> รูปแบบการแจ้งลา: จะต้องแจ้งกำหนดระยะเวลา วันลาให้ครบชัดเจนเท่านั้น ลาวันไหนถึงวันไหนบ้าง เช่น วันที่ 7/8/69 - 10/8/69 หากมีเหตุจำเป็นที่จะต้องลาติดต่อกันเกิน 8 วัน ให้ทำการติดต่อกับ ผอ.โรงพยาบาลโดยตรงเท่านั้น
+        </li>
+        <li>
+            <strong>7.</strong> การโดนระงับไวริส: หลังจากลายาวครบ 1 เดือน จะต้องมีการเคลื่อนไหวไม่ต่ำกว่า 20 ชั่วโมงในเดือนถัดไป
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ:</strong> ถ้าไม่มีการเคลื่อนไหวตามเงื่อนไข ไม่เข้าเวรเลย จะทำการระงับไวริสทันที
+            </div>
+        </li>
+    </ul>
+    
+    <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+                   การโดนระงับไวริส หลังจากลายาวครบ 1 เดือน จะต้องมีการเคลื่อนไหวไม่ต่ำกว่า 20 ชั่วโมงในเดือนถัดไป
+ถ้าไม่มีการเคลื่อนไหวตามเงื่อนไข ไม่เข้าเวรเลย จะทำการระงับไวริสทันทีค่ะ ออก discord ไม่แจ้ง ไม่ลาออกก่อนออกแพทย์ รีตัวทุกกรณี
+                </div>
+</div>
+
+
+<!-- 3. ขั้นตอนการทำงานของหน่วยงานแพทย์ -->
+<div id="doctor-workflow" class="content-section">
+    <div class="header-section">
+        <h2>ขั้นตอนการทำงานของหน่วยงานแพทย์</h2>
+    </div>
+    
+    <!-- 3.1 เคสทั่วไป -->
+    <div id="sub-work-1" class="sub-content-item active">
+        <div class="sub-header">ขั้นตอนการทำงานเคสทั่วไป</div>
+        <ul class="rules-list">
+            <li><strong>1.</strong> การรับเคส จะไปเคสต่อเมื่อมีการกดเรียกเคส (กด G) เข้า Tablet เท่านั้น</li>
+            <li><strong>2.</strong> เมื่อแพทย์ถึงพื้นที่หน้างานแล้ว จะทำการรักษา (ชุบ) โดยใส่ราคาตามพื้นที่หน้างาน</li>
+            <li><strong>3.</strong> หากคนไข้ต้องการฉีดยาหน้างาน สามารถแจ้งแพทย์เพื่อขอฉีดยาหน้างานได้</li>
+            <li><strong>4.</strong> ในกรณีที่ไม่พบผู้สลบหน้างาน แพทย์จะทำการโทรติดต่อคนไข้ก่อน 1 ครั้ง และแพทย์จะทำการประกาศไม่พบผู้สลบ และลงแจ้งรายละเอียดในนิตยสารประเทศ (ห้องประกาศเรียกเคสตกหล่น)</li>
+        </ul>
+    </div>
+
+    <!-- 3.2 เคสสุ่มเสี่ยง -->
+    <div id="sub-work-2" class="sub-content-item">
+        <div class="sub-header">ขั้นตอนการทำงานเคสสุ่มเสี่ยง</div>
+        <ul class="rules-list">
+            <li><strong>1.</strong> พื้นที่สุ่มเสี่ยง งานดำ ชุบหน้างานได้เลย ใส่บิล พื้นที่สุ่มเสี่ยง ไม่ฉีดยา</li>
+            <li><strong>2.</strong> พื้นที่เรเบล สามารถชุบหน้างานได้เลย ใส่บิล พื้นที่สุ่มเสี่ยง ไม่ฉีดยา</li>
+            <li><strong>3.</strong> หากเป็นเคสทะเลาะวิวาท, สตอรี่ ให้นำกลับโรงพยาบาล สามารถใช้ชุบหมู่ได้ บิลพื้นที่สุ่มเสี่ยง ไม่ฉีดยา</li>
+            <li><strong>4.</strong> พื้นที่บริเวณข้างในคุกใหญ่ ต้องแจ้งตำรวจก่อนทุกครั้ง และแพทย์จะทำการรักษาหน้างาน ไม่ฉีดยาทุกกรณี</li>
+        </ul>
+    </div>
+
+    <!-- 3.3 เคส สน. -->
+    <div id="sub-work-3" class="sub-content-item">
+        <div class="sub-header">ขั้นตอนการไปเคส สน.</div>
+        <ul class="rules-list">
+            <li><strong>1.</strong> เมื่อมีตำรวจเข้าวอมาขอแพทย์หน้า สน. 1 ท่าน ให้ทาง OP ขานรับและเรียกรันคิวตามปกติ</li>
+            <li><strong>2.</strong> เมื่อถึงเคสให้แพทย์ชุบและใส่บิลพื้นที่ในเมือง ฉีดยาได้ตามปกติ</li>
+            <li><strong>3.</strong> เมื่อจบเคสให้แจ้งในวอทุกครั้ง <span class="text-bold-dark">"เคส สน เรียบร้อยครับ/ค่ะ & เคส (ชื่อตัวเอง) เคลียร์ครับ/ค่ะ"</span></li>
+        </ul>
+    </div>
+
+    <!-- 3.4 เคส สภา -->
+    <div id="sub-work-4" class="sub-content-item">
+        <div class="sub-header">ขั้นตอนการไปเคส สภา</div>
+        <ul class="rules-list">
+            <li><strong>1.</strong> เมื่อมีสภาเข้าวอมาแจ้งขอแพทย์ ให้ทาง OP ขานรับและรันคิวตามปกติ</li>
+            <li><strong>2.</strong> เมื่อถึงพื้นที่หน้างาน ให้แพทย์เจ้าของเคสทำการขออนุญาตเพื่อตรวจสอบบัตรประชาชน และแจ้งให้ทาง OP ตรวจสอบว่าเป็นเคสที่มีการเคลื่อนย้ายหรือไม่</li>
+            <li><strong>3.</strong> หากเป็นเคสเคลื่อนย้าย ให้ทำการใส่บิล x2 กับ ครอบครัว หรือแก๊งที่เป็นฝั่งเคลื่อนย้าย (ใส่บิล x2 ตามพื้นที่ที่กดเรียกเคสมา)</li>
+            <li><strong>4.</strong> ทำการรักษาผู้สลบ ใส่บิลพื้นที่ในเมือง (กรณีมีผู้สลบมากกว่า 2 คน ให้ทำการชุบทั้งหมด ไม่ฉีดยาทุกกรณี)</li>
+            <li><strong>5.</strong> แจ้งกับทาง ครอบครัว หรือแก๊ง ที่เป็นฝั่งเคลื่อนย้าย ให้รับทราบเรื่องการโดน <span class="text-red">Blacklist</span> และแจ้งให้ OP ทำการ <span class="text-red">Blacklist</span> แก๊ง เนื่องจากเป็นการทำผิดกฎในหัวข้อการเรียกเคส ในข้อที่ 5</li>
+            <li><strong>6.</strong> เมื่อจบเคสแล้วให้ทำการแจ้งในวิทยุสื่อสารทุกครั้งว่า <span class="text-bold-dark">"เคส สภา เรียบร้อยครับ / ค่ะ หรือ เคส (ชื่อตัวเอง) เคลียร์ครับ / ค่ะ"</span></li>
+        </ul>
+    </div>
+
+    <!-- 3.5 สตอรี่เถื่อน & สตอรี่ตีตัวหลุด -->
+    <div id="sub-work-5" class="sub-content-item">
+        <div class="sub-header">ขั้นตอนการไปเคส สตอรี่เถื่อน และ สตอรี่ตีตัวหลุด</div>
+        <ul class="rules-list">
+            <li>
+                
+                <div style="padding-left: 20px; margin-top: 6px;">
+                    <div style="margin-bottom: 8px;"><strong>1.1</strong> เมื่อแพทย์ไปถึงหน้างาน หากพบว่ามีการตีกันอยู่ แพทย์จะปิดไซเรน และถอยออกจากพื้นที่ รอจนกว่าสถานการณ์สงบ (ไม่มีการใช้กำลัง / ตีปะทะกัน) แพทย์จะทำการประกาศเข้าพื้นที่ภายใน 2 นาที ทุกครั้ง</div>
+                    <div style="margin-bottom: 8px;"><strong>1.2</strong> หากมีฝ่ายนึงล้มลงไปหมดแล้ว แพทย์จะทำการประกาศเข้าพื้นที่ภายใน 2 นาที ทุกครั้ง <strong>(ยกเว้นอีกฝ่ายแจ้งให้แพทย์เข้าดำเนินการได้ทันที)</strong></div>
+                    <div style="margin-bottom: 8px;"><strong>1.3</strong> <strong>หากแพทย์ไม่พบคู่กรณี</strong> จะนับว่าเป็นเคสปกติ รักษา+ฉีดยาหน้างานได้ <strong>ยกเว้น</strong> ผู้สลบมีการใส่ปลอกแขนสตอรี่ตีตัวหลุด (สีเขียวเลม่อน) หมอจะนำกลับมารักษาที่โรงพยาบาล
+                        <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                             <strong>หมายเหตุ :</strong> ทุกสตอรี่ หากไม่มีการใส่ปลอกแขนสตอรี่ตีตัวหลุด (สีเขียวเลม่อน) จำเป็นต้องมีคู่กรณีปรากฏตัวอยู่ด้วยทุกครั้ง จะเป็นการยืนบลัฟคู่กรณีที่เป็นศพอยู่ หรือไม่บลัฟแล้ววิ่งมาชี้แจงกับแพทย์ก็ได้เช่นกัน ถึงอย่างไรก็ตามขึ้นอยู่กับดุลยพินิจของแพทย์หน้างานด้วยเช่นกัน
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 8px;"><strong>1.4</strong>  <strong>หากแพทย์ไม่พบผู้สลบ</strong> แพทย์เจ้าของเคสจะต้องทำการถามผู้สลบก่อนที่จะรักษาในทุกครั้งที่ไปเคส ว่าเป็นสตอรี่เถื่อน หรือโดนตีตัวหลุดหรือไม่ หากผู้สลบไม่ได้ให้คำตอบหรือตอบคำถามไม่ชัดเจน แพทย์จะถือว่าผู้สลบยอมรับว่าเป็นเคสทั่วไป ให้ทำการรักษาหน้างานและฉีดยาตามปกติ</div>
+                </div>
+            </li>
+            <li> เมื่อครบเวลาประกาศแพทย์ชุดขาวจะทำการเปิดไซเรนเข้าพื้นที่ และเปิดวงเคอร์ฟิวทันที ไม่มีข้อยกเว้น 
+                <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                    <strong>หมายเหตุ :</strong> อย่าลืมปิดวงเคอร์ฟิวหลังปฏิบัติหน้าที่เสร็จ
+                </div>
+            </li>
+
+            <li> หากแพทย์ทำการเข้าพื้นที่และเปิดวงเคอร์ฟิวแล้ว แก๊งที่ชนะไฟต์นั้นต้องออกจากวงเคอร์ฟิวก่อนหมดเวลา 1 นาที ของวง หากออกไม่ทันจะถูก <span class="text-red">Blacklist</span> ทันที 
+                <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                    <strong>หมายเหตุ :</strong> หากออกจากวงเคอร์ฟิวแล้ว สามารถออกไปรอดำเนินสตอรี่ดัก loop ต่อ เป็นลำดับต่อไป
+                </div>
+            </li>
+            <li>
+
+                <div style="padding-left: 20px; margin-top: 6px;">
+                    <div style="margin-bottom: 8px;"><strong>4.1</strong> หากแพทย์ตรวจสอบ GPS ที่มีการกดเรียกเคสตรงพื้นนั้นมา แล้วพบว่าผู้สลบมีการกระจัดกระจาย แพทย์สามารถใช้เมนูดึงร่างผู้สลบได้แค่ในวงเคอร์ฟิว เพื่อป้องกันการตกหล่นของเคส</div>
+                    <div style="margin-bottom: 8px;"><strong>4.2</strong> แพทย์จะนำตัวผู้สลบกลับมาชุบที่โรงพยาบาล และไม่ฉีดยา</div>
+                    <div style="margin-bottom: 8px;"><strong>4.3</strong> กรณีแก๊งต้องการนำตัวขึ้นสภา ให้แก๊งไปแจ้งสภาให้ทำการเรียกตัวอีกฝ่ายเท่านั้น</div>
+                </div>
+            </li>
+            <li> หลังจากแพทย์ชุบคนสุดท้ายขึ้นมานับ Cooldown 5 นาที แพทย์ต้องแจ้งคนที่มีสตอรี่ทุกครั้งว่าอยู่ได้ถึงกี่โมง <br>
+            <em>ex. เริ่มนับคนสุดท้ายเกิด (เกิด 00.00 น. อยู่ได้ถึง 00.05 น. หาก 00.06 น. ยังไม่อยออกจากพื้นที่ รพ. จะทำการ <span class="text-red">Blacklist</span> ทันที ยกเว้นคนที่ยืนเหม่อ แพทย์จะทำการส่งตัว)</em></li>
+        </ul>
+        <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8;">
+            <strong style="font-size: 24px;">ข้อควรระวังเด็ดขาด :</strong> ห้ามเคลื่อนย้ายผู้สลบทุกกรณี (รวมถึงการอุ้มไปสภา) ผิดกฎประเทศ + <span class="text-red">Blacklist</span> แพทย์ และแพทย์จะไม่ฉีดยาให้คนที่มีสตอรี่เถื่อน หรือสตอรี่ตีตัวหลุด หากมีการทะเลาะวิวาทในพื้นที่โรงพยาบาล (Safezone) แพทย์สามารถ <span class="text-red">Blacklist</span> ได้ทันที
+        </div>
+    </div>
+</div>
+
+ <!-- 4. การเรียกเคส -->
+<div id="call-case" class="content-section">
+    <div class="header-section">
+        <h2> การเรียกเคส</h2>
+    </div>
+    <ul class="rules-list">
+        <li>
+            <strong>1.</strong> หากกดเคสมา แต่ได้มีการใช้ AED ชุบกันเอง เมื่อแพทย์ไปถึงหน้างานแล้วเจอคนเรียกเคส จะทำการใส่บิล x2 ที่ผู้สลบหรือคนที่ชุบตามราคาค่ารักษาแต่ละพื้นที่ 
+            <span class="penalty-indent text-red">บทลงโทษ : บิล x2</span>
+        </li>
+        <li>
+            <strong>2.</strong> หากกดเคสมา เมื่อแพทย์ไปถึงจุดเรียกเคสแล้ว ไม่เจอผู้สลบ แพทย์จะทำการโทรหา เพื่อชำระค่าปรับ x4 (ทุกกรณี) ตามราคาค่ารักษาแต่ละพื้นที่ 
+            <span class="penalty-indent text-red">บทลงโทษ : บิล x4</span>
+        </li>
+        <li>
+            <strong>3.</strong> หากผู้สลบไม่รับสาย แพทย์จะประกาศไม่พบผู้สลบ ให้ผู้สลบติดต่อแพทย์ภายใน 30 นาที ถ้าหากไม่มีการติดต่อ 
+            <span class="penalty-indent text-red">บทลงโทษ : โดน Blacklist ทันที</span>
+        </li>
+        <li>
+            <strong>4.</strong> เคสทั่วไป หากมีการกดเคส <span class="text-red">ห้ามเคลื่อนย้ายผู้สลบเด็ดขาด</span> หากมีการนำเคสมาส่งโรงพยาบาลจะถูกปรับค่ารักษา x2 ตามราคาค่ารักษาตามพื้นที่ GPS ที่กดเรียกมา 
+            <span class="penalty-indent text-red">บทลงโทษ : บิล x2</span>
+        </li>
+        <li>
+            <strong>5.</strong> เคสสตอรี่เถื่อน / ทะเลาะวิวาท <span class="text-red">ห้ามเคลื่อนย้ายผู้สลบทุกกรณี</span> (รวมถึงการนำไปสภา)
+            <div class="penalty-indent text-red">บทลงโทษ : Blacklist</div>
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> ผิดกฎประเทศ + โดน blacklist แพทย์
+            </div>
+        </li>
+        <li>
+            <strong>6.</strong> หากเป็นเคสที่กดขอความช่วยเหลือมาจากพื้นที่นอกแมพหรือพื้นที่ที่แพทย์ไม่สามารถเข้าถึงพื้นที่ได้ เช่น ทะเลดำ ตกแมพ แพทย์จะทำการประกาศให้ผู้สลบแจ้ง Report แอดมิน ทั้งในประเทศ และนิตยสารเท่านั้น แพทย์จะทำการประกาศทุกครั้งที่กดเคสเข้ามา และหากสลบจนหมดเวลา แพทย์จะไม่รับผิดชอบทุกกรณี
+        </li>
+        <li>
+             <strong>7.</strong> เคสสตอรี่เถื่อน หากมีการกดเรียกเคสมา เมื่อแพทย์ไปถึงหน้างานแล้วไม่พบคู่กรณี แพทย์จะนับว่าเป็นเคสปกติ และจะดำเนินการรักษาหน้างานทันที ยกเว้น ผู้สลบมีการใส่ปลอกแขนสตอรี่ตีตัวหลุด (สีเขียวเลม่อน) หมอจะนำกลับมารักษาที่โรงพยาบาลทุกสตอรี่
+             <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>หมายเหตุ :</strong> ทุกสตอรี่ หากไม่มีการใส่ปลอกแขนสตอรี่ตีตัวหลุด (สีเขียวเลม่อน) จำเป็นต้องมีคู่กรณีปรากฏตัวอยู่ด้วยทุกครั้ง จะเป็นการยืนบัพคู่กรณีที่เป็นศพอยู่ หรือไม่บัพแล้ววิ่งมาชี้แจงกับแพทย์ก็ได้เช่นกัน ถึงอย่างไรก็ตามขึ้นอยู่กับดุลยพินิจของแพทย์หน้างานด้วยเช่นกัน
+            </div>
+        </li>
+    </ul>
+    <div style="font-size: 21px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+        กรณีแพทย์ไปรับเคสผู้ป่วยตามพื้นที่ต่างๆ หากมีการกระทำผิดกฎประเทศ หรือ การกระทำที่ส่งผลต่อสตอรี่ต่างๆ นั้นไม่สามารถอ้างอิง บุคลากรแพทย์ หรือ หลักฐานจากแพทย์ ได้ทุกกรณีครับ
+    </div>
+</div>
+
+<!-- 5. Blacklist รพ. -->
+<div id="blacklist-hosp" class="content-section">
+    <div class="header-section">
+        <h2> <span class="text-red">Blacklist</span> </h2>
+    </div>
+    <ul class="rules-list">
+        <li>
+            <strong>1.</strong> แพทย์จะทำการตักเตือนหรือไม่ตักเตือน ก่อนพิจารณา Blacklist โดยแบ่งเป็นกรณีตามหัวข้อที่กำหนด เช่น ควักอาวุธในพื้นที่โรงพยาบาล จะถูกนับเป็นการเตือนครั้งที่ 1 หากทำผิดซ้ำจนถึงเกณฑ์ (เช่น เตือนครบตามกำหนด) จะประกาศพร้อม Blacklist และปรับเงินทันที 
+            <span style="color: #fc0404; font-weight: normal;">บันทึกประวัติ / เตรียม Blacklist</span>
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> หากทำผิดซ้ำจนถึงเกณฑ์ (เช่น เตือนครบตามกำหนด) จะประกาศพร้อม Blacklist และปรับเงินทันที
+            </div>
+        </li>
+        <li>
+            <strong>2.</strong> ทุกการกระทำผิดที่โดนปรับและ Blacklist จะต้องขึ้นอยู่กับดุลพินิจร่วมกับแพทย์ยศสูงสุด ณ เวลานั้นพิจารณาเป็น Case by Case ตามความรุนแรงของพฤติกรรมและหลักฐานที่มีตามดุลพินิจของแพทย์ 
+            <span style="color: #fc0404; font-weight: normal;">ตามดุลพินิจของแพทย์</span>
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> พิจารณาเป็น Case by Case ตามความรุนแรงของพฤติกรรมและหลักฐานที่มี
+            </div>
+        </li>
+        <li>
+            <strong>3.</strong> ประชาชน, ครอบครัว หรือแก๊ง ที่โดน Blacklist จะต้องชำระค่าปรับเป็น 'เงินสดหรือโอน' และต้องชำระทันทีเพื่อปลด Blacklist สามารถติดต่อชำระได้ที่แพทย์ยศสูงสุด ณ เวลานั้น 
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : case by case</span>
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> สามารถติดต่อชำระได้ที่แพทย์ยศสูงสุด ณ เวลานั้น
+            </div>
+        </li>
+        <li>
+            <strong>4.</strong> กรณีตกลงจะจ่ายค่า Blacklist แพทย์จะทำการชุบชีวิตผู้สลบขึ้นมาเพื่อให้ทำการเคลียร์ค่าปรับ หากแก๊งตกลงแล้วไม่จ่ายตามที่ตกลงกันไว้ แพทย์มีสิทธิ์ปรับเพิ่มเป็น Blacklist x2 ทันทีในทุกกรณี 
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist x2</span>
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> หากแก๊งตกลงแล้วไม่จ่ายตามที่ตกลงกันไว้ แพทย์มีสิทธิ์ปรับเพิ่มเป็น Blacklist x2 ทันทีในทุกกรณี
+            </div>
+        </li>
+        <li>
+            <strong>5.</strong> กรณีติด Blacklist ยังไม่ทำการจ่ายค่า Blacklist และยังกระทำผิดกฎซ้ำอีกครั้งแพทย์จะทำการเพิ่มค่าแบล็คลิสเป็น X2 จากค่าแบล็คลิสที่ประกาศไป 
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist x2</span>
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> แพทย์จะทำการเพิ่มค่าแบล็คลิสเป็น X2 จากค่าแบล็คลิสที่ประกาศไป
+            </div>
+        </li>
+        <li>
+            <strong>6.</strong> กรณีติด Blacklist x2 แล้ว ยังกระทำผิดกฎซ้ำอีกครั้ง 
+            <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist 24 ชม.</span>
+        </li>
+        <li>
+            <strong>7.</strong> แก๊ง, แฟม, หรือประชาชน ที่ติด Blacklist กับทางโรงพยาบาล แพทย์จะไม่ทำการรักษา ชุบและฉีดยาให้ไม่มีข้อยกเว้นใดๆ ทั้งสิ้น 
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> ไม่มีข้อยกเว้นใดๆ ทั้งสิ้น
+            </div>
+        </li>
+        <li>
+            <strong>8.</strong> การตัดสินใจ หรือ Overlay ของทางแพทย์ถือเป็นที่สิ้นสุดในทุกกรณี ห้ามโต้แย้งเพื่อเปลี่ยนคำตัดสิน หากฝ่าฝืนจะเพิ่มโทษขั้นเด็ดขาดทันที ยกเว้นกรณีที่ผู้ถูก Blacklist ไม่ได้กระทำผิดนั้นๆ จริง จะสามารถส่งหลักฐานที่ชัดเจนโดยใช้ Overlay เพื่อโต้แย้งได้ และหากพิสูจน์แล้วว่า ผู้ถูก Blacklist ไม่ได้กระทำผิดจริง แพทย์ที่ทำการ Blacklist จะต้องรับผิดชอบโดยการโดนลงโทษวินัย 
+            <span style="color: #fc0404; font-weight: normal;">คำตัดสินแพทย์ถือเป็นที่สิ้นสุด</span>
+            
+            <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
+                <strong>เงื่อนไข:</strong> ห้ามโต้แย้งเพื่อเปลี่ยนคำตัดสิน หากฝ่าฝืนจะเพิ่มโทษขั้นเด็ดขาดทันที ยกเว้นกรณีที่ผู้ถูก Blacklist ไม่ได้กระทำความผิดนั้นๆ จริง จะสามารถส่งหลักฐานที่ชัดเจนโดยใช้ Overlay เพื่อโต้แย้งได้ และหากพิสูจน์แล้วว่า ผู้ถูก Blacklist ไม่ได้กระทำผิดจริง แพทย์ที่ทำการ Blacklist จะต้องรับผิดชอบโดยการโดนลงโทษวินัย
+            </div>
+            <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+                   การ Blacklist แพทย์สามารถใช้ได้เพียงหลักฐาน IC เท่านั้น เช่น สายตาของแพทย์, หูของแพทย์ หรือภาพถ่ายมาจาก F12 และภาพจาก Instarpic
+แพทย์จะไม่สามารถนำหลักฐาน OC มา Blacklist และจะไม่สามารถ Blacklist ย้อนหลังได้เกิน 30 นาที หลังจากเวลาเกิดเหตุ
+หากไม่ทำการเคลียร์ Blacklist ภายใน 24 ชั่วโมง อ้างอิงจากเวลาที่ทำการประกาศครั้งแรก แพทย์จะเพิ่มค่า Blacklist เป็น x4
+                </div>
+        </li>
+    </ul>
+</div>
+
+<!-- 6. กฎ Blacklist -->
+<div id="blacklist-rule" class="content-section">
+    <div class="header-section">
+        <h2>กฎ <span class="text-red">Blacklist</span></h2>
+    </div>
+    
+    <!-- หน้า/หมวดที่ 1 -->
+    <div id="sub-bl-1" class="sub-content-item">
+        <div class="sub-header">ก่อกวนการทำงานแพทย์</div>
+        <ul class="rules-list">
+             <li>
+                <strong>1.</strong> ก่อกวน ขัดขวางการทำงานแพทย์ ใส่หน้ากาก ผ้าปิดปาก หมวกกันนอค เกินกว่า 30 นาที <span style="color: #fc0404; font-weight: normal;">ตักเตือน 1 ครั้ง</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist 100,000 ต่อคน</span>
+            </li>
+            <li>
+                <strong>2.</strong> ก่อความวุ่นวายทางเสียง เช่น บั้มรถ เบิ้ลรถ/เบิร์นยาง ใช้ soundpad, เปิดลำโพงเสียงดัง, บูสไมค์ เป็นต้น <span style="color: #fc0404; font-weight: normal;">ตักเตือน 1 ครั้ง</span>
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist 100,000 ต่อคน</span>
+            </li>
+            <li>
+                <strong>3.</strong> จอดรถกีดขวาง บริเวณพื้นที่เบิกรถแพทย์ และทางเข้า - ออก โรงพยาบาล <span style="color: #fc0404; font-weight: normal;">ตักเตือน 1 ครั้ง</span>
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist 100,000 ต่อคน</span>
+            </li>
+            <li>
+                <strong>4.</strong> เจตนาควักอาวุธต่อหน้าแพทย์ <span style="color: #fc0404; font-weight: normal;">ตักเตือน 1 ครั้ง</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist 100,000 ต่อคน</span>
+            </li>
+            <li>
+                <strong>5.</strong> ถ้าหากมีการกดเรียกเคสแล้ว แพทย์ลงพื้นที่ไม่พบผู้สลบ จะทำการเรียกตัวให้มาพบแพทย์ภายใน 30 นาที หากไม่ทำการติดต่อ
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist 100,000 ต่อคน</span>
+            </li>
+            <li>
+                <strong>6.</strong> ลากสตอรี่เข้าเขตพื้นที่โรงพยาบาล หากมีการทำสตอรี่ หรือลากสตอรี่เข้าเขตพื้นที่โรงพยาบาล ไม่ว่าจะด้วยการกระทำทางวาจา หรือการใช้ความรุนแรง ต่าง ๆ รวมถึงการหนีการจับกุมของตำรวจเข้ามาในพื้นที่โรงพยาบาล <span style="color: #fc0404; font-weight: normal;">ไม่มีการตักเตือน ผิดกฎประเทศ</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : ผิดกฏประเทศ</span>
+            </li>
+            <li>
+                <strong>7.</strong> หากผู้ใช้บริการเป็นผู้ที่มีสตอรี่ เมื่อใช้บริการทางโรงพยาบาลเสร็จเรียบร้อย ต้องออกจากพื้นที่โรงพยาบาลทันที ภายใน 5 นาที <span style="color: #fc0404; font-weight: normal;">ไม่มีการตักเตือน</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 500,000 ครอบครัว 700,000 แก๊ง 1,000,000</span>
+            </li>
+            <li>
+                <strong>8.</strong> ก่อกวน ขัดขวางการทำงานแพทย์ บลัฟต่อหน้าแพทย์ ขับรถเหยียบร่างผู้สลบ บั้มรถ เผาผู้สลบ และทำร้ายร่างกายต่อหน้าแพทย์ ในเขตที่แพทย์เข้าพื้นที่แล้ว หรือกำลังปฏิบัติหน้าที่ การกระทำดังกล่าวอยู่ในสายตาแพทย์ หรือแพทย์ได้ยิน ยกเว้นพื้นที่ถนนหน้าโรงพยาบาล (ก่อนถึงสะพานรพ. - ปั้มรพ. ) <span style="color: #fc0404; font-weight: normal;">ไม่มีการตักเตือน</span>
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 500,000 ครอบครัว 700,000 แก๊ง 1,000,000</span>
+            </li>
+            <li>
+                <strong>9.</strong> ขณะที่แพทย์เข้าพื้นที่ หรืออยู่ในพื้นที่ หากมีการทำร้ายร่างกายกัน (ต่อย ตี แทง เผารถระเบิด) แล้วพลาดมาโดนแพทย์ แพทย์ได้รับบาดเจ็บ หรือสลบ <span style="color: #fc0404; font-weight: normal;">ไม่มีการตักเตือน</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 500,000 ครอบครัว 700,000 แก๊ง 1,000,000</span>
+            </li>
+            <li>
+                <strong>10.</strong> ดึง, ชุบ, หรือปล้นผู้สลบ จากมือ/ท้ายรถแพทย์ ขณะที่แพทย์ปฎิบัติหน้าที่อยู่ <span style="color: #fc0404; font-weight: normal;">ไม่มีการตักเตือน</span>
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 500,000 ครอบครัว 700,000 แก๊ง 1,000,000</span>
+            </li>
+            <li>
+                <strong>11.</strong> เคลื่อนย้ายผู้สลบต่อหน้าแพทย์ หรือไม่ให้ร่างผู้สลบกับแพทย์ <span style="color: #fc0404; font-weight: normal;">ไม่มีการตักเตือน</span>
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 500,000 ครอบครัว 700,000 แก๊ง 1,000,000</span>
+            </li>
+            <li>
+                <strong>12.</strong> เคสสตอรี่เถื่อน / สตอรี่ ห้ามเคลื่อนย้ายผู้สลบทุกกรณี ( รวมถึงการนำไปสภา )
+                 <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 500,000 ครอบครัว 700,000 แก๊ง 1,000,000</span>
+            </li>
+        </ul>
+        <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+            หากอยู่ในพื้นที่โรงพยาบาล แพทย์สามารถเช็คบัตรได้เลยโดยไม่ต้องขอ และแพทย์สามารถเข้าไปเตือน หรือห้ามได้เลยโดยไม่ผิดกฎ BK หากเกินความควบคุมของแพทย์สามารถเรียกเจ้าหน้าที่ตำรวจมาระงับเหตุ จับกุม หรือโทษ Blacklist ต่อไปได้ตามกฎ
+        </div>
+    </div>
+
+    <!-- หน้า/หมวดที่ 2 -->
+    <div id="sub-bl-2" class="sub-content-item">
+        <div class="sub-header">ดูหมิ่นแพทย์</div>
+        <ul class="rules-list">
+            <li>
+                <strong>1.</strong> ข่มขู่แพทย์ หรือใช้คำพูดที่ไม่สุภาพ Toxic เชิง ดูถูก ดูหมิ่น บลัฟ ล้อเลียน ล้อหลอก เหยียดหยาม<span style="color: #fc0404; font-weight: normal;">  ตักเตือน 1 ครั้ง</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 300,000 ครอบครัว 500,000 แก๊ง 700,000</span>
+            </li>
+            <li>
+                <strong>2.</strong> ใช้คำพูด หรือมีเจตนากระทำการใดๆ ที่สื่อถึงการล้อหลอกแพทย์ ทำให้แพทย์เข้าใจผิด จนไม่สามารถเข้าปฏิบัติหน้าที่ได้ <span style="color: #fc0404; font-weight: normal;">  ไม่มีตักเตือน</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 300,000 ครอบครัว 500,000 แก๊ง 700,000</span>
+            </li>
+        </ul>
+        <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+            หากอยู่ในพื้นที่โรงพยาบาล แพทย์สามารถเช็คบัตรได้เลยโดยไม่ต้องขอ และแพทย์สามารถเข้าไปเตือน หรือห้ามได้เลยโดยไม่ผิดกฎ BK หากเกินความควบคุมของแพทย์สามารถเรียกเจ้าหน้าที่ตำรวจมาระงับเหตุ จับกุม หรือโทษ Blacklist ต่อไปได้ตามกฎ
+        </div>
+    </div>
+
+    <!-- หน้า/หมวดที่ 3 -->
+    <div id="sub-bl-3" class="sub-content-item">
+        <div class="sub-header">การทำร้ายร่างกายแพทย์</div>
+        <ul class="rules-list">
+            <li>
+                <strong>1.</strong> ทำร้ายร่างกายแพทย์ ห้ามทำร้ายร่างกายแพทย์โดยเจตนาหรือไม่เจตนาทุกกรณี <span style="color: #fc0404; font-weight: normal;">  ตักเตือน 1 ครั้ง</span>
+                <br><span style="color: #ee0d0d; font-weight: normal;">บทลงโทษ : Blacklist ประชาชน 300,000 ครอบครัว 500,000 แก๊ง 700,000</span>
+            </li>
+        </ul>
+        <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+            หากอยู่ในพื้นที่โรงพยาบาล แพทย์สามารถเช็คบัตรได้เลยโดยไม่ต้องขอ และแพทย์สามารถเข้าไปเตือน หรือห้ามได้เลยโดยไม่ผิดกฎ BK หากเกินความควบคุมของแพทย์สามารถเรียกเจ้าหน้าที่ตำรวจมาระงับเหตุ จับกุม หรือโทษ Blacklist ต่อไปได้ตามกฎ
+        </div>
+    </div>
+</div>
+
+<!-- 7. อัตราค่ารักษา & ห้องศัลยกรรม -->
+<div id="treatment-rate" class="content-section">
+    <div class="header-section">
+        <h2> อัตราค่ารักษา (IC) </h2>
+    </div>
+    <ul class="rules-list">
+        <li>
+            <strong>1.</strong> ฉีดยา: เพิ่มเลือดเต็ม 100% 
+            <span class="penalty-indent text-red">ค่าบริการ : 1,000</span>
+        </li>
+        <li>
+            <strong>2.</strong> ศัลยกรรมห้องศัลยกรรม: ค่าเปิดห้อง 10,000, ค่าศัลยกรรม 100,000 
+            <span class="penalty-indent text-red"> เงื่อนไข : แพทย์ใส่บิลค่าเปิดห้อง</span>
+        </li>
+        <li>
+            <strong>3.</strong> ปั้มหัวใจ - เขตโรงพยาบาล (อุ้มเคสมาส่งรพ. , เคสหน้ารพ) 
+            <span class="penalty-indent text-red">ค่าบริการ : 1,000 </span>
+        </li>
+        <li>
+            <strong>4.</strong> ปั้มหัวใจ - เขตในเมือง <span style="color: rgb(14, 231, 25);">(พื้นที่สีเขียว)</span> 
+            <span class="penalty-indent text-red">ค่าบริการ : 1,500 </span>
+        </li>
+        <li>
+            <strong>5.</strong> ปั้มหัวใจ - เขตนอกเมือง <span style="color: rgb(252, 235, 7);">(พื้นที่สีเหลือง)</span>
+            <span class="penalty-indent text-red">ค่าบริการ : 2,000 </span>
+        </li>
+        <li>
+           <strong>6.</strong> ปั้มหัวใจ - เขตเมืองบน <span style="color: red;">(พื้นที่สีแดง)</span>
+            <span class="penalty-indent text-red">ค่าบริการ : 2,500</span>
+        </li>
+        <li>
+            <strong>7.</strong> ปั้มหัวใจ - พื้นที่เข้าถึงยาก (ภูเขา, ตึกสูง, ในน้ำ หรือพื้นที่ที่แพทย์ต้องใช้อุปกรณ์ช่วยเหลือเพิ่มเติม) 
+            <span class="penalty-indent text-red">ค่าบริการ : 3,000 </span>
+        </li>
+        <li>
+            <strong>8.</strong> ปั้มหัวใจ - พื้นที่สุ่มเสี่ยง, ทะเลาะวิวาทต่อหน้าแพทย์ 
+            <span class="penalty-indent text-red">ค่าบริการ : 4,000 </span>
+        </li>
+    </ul>
+
+    <!-- หัวข้อที่ 2: การใช้ห้องศัลยกรรม -->
+    <div class="header-section" style="margin-top: 40px;">
+        <h2> การใช้ห้องศัลยกรรม </h2>
+    </div>
+    <ul class="rules-list">
+        <li>
+            <strong>1.</strong> ผู้ที่ต้องการศัลยกรรม สามารถติดต่อแพทย์ที่หน้าโรงพยาบาลแจ้งขอทำศัลยกรรมได้เลย
+        </li>
+        <li>
+            <strong>2.</strong> ค่าเปิดห้องแพทย์จะทำการใส่บิล 10K ราคาศัลยกรรม 100K ชำระตอนศัลยกรรมเสร็จ
+        </li>
+        <li>
+            <strong>3.</strong> ผู้ศัลยกรรมจะต้องตรวจสอบความเรียบร้อยก่อนกดตกลง หากกดตกลงแล้วทางโรงพยาบาลไม่มีนโยบายคืนเงินค่าศัลยกรรม ทุกกรณี
+        </li>
+        <li>
+            <strong>4.</strong> สำหรับผู้ที่มีสตอรี่อยู่ (สตอรี่เถื่อน / ใส่ปลอกแขนสตอรี่) <span class="text-red">ห้ามศัลยกรรมทุกกรณี</span> หากฝ่าฝืนจะเป็นการทำผิดกฎประเทศ
+        </li>
+    </ul>
+</div>
+
+<!-- Script ควบคุมการทำงานของเมนูและการกางออก -->
+    <script>
+        function handleMenuClick(sectionId, element, firstSubId = null, hasSub = false) {
+            // 1. จัดการเปลี่ยนหน้าหลัก (Content Section)
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // 2. จัดการเปิด-ปิด เมนูด้านข้าง (Sidebar Menu)
+            const allMenuLis = document.querySelectorAll('.menu-list > li');
+            allMenuLis.forEach(li => {
+                if (!li.contains(element.nextElementSibling)) {
+                    li.classList.remove('open');
+                }
+            });
+
+            const parentLi = element.parentElement;
+            if (hasSub) {
+                parentLi.classList.toggle('open');
+                // ถ้ามีเมนูย่อย และมีกำหนด sub แรกไว้ ให้แสดงตัวแรกอัตโนมัติ
+                if (firstSubId) {
+                    const firstSubElement = parentLi.querySelector('.submenu-list a');
+                    showSubSection(sectionId, firstSubId, firstSubElement);
+                }
+            } else {
+                parentLi.classList.add('open');
+                // ถ้าเป็นเมนูหลักที่ไม่มีเมนูด่อย ให้ซ่อน sub-content ทั้งหมดในหน้านั้นเพื่อไม่ให้ค้าง
+                if (targetSection) {
+                    const subItems = targetSection.querySelectorAll('.sub-content-item');
+                    subItems.forEach(item => item.classList.remove('active'));
+                }
+            }
+
+            // 3. จัดการสถานะ Active ของลิงก์หลัก
+            const allLinks = document.querySelectorAll('.menu-list > li > a');
+            allLinks.forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function showSubSection(sectionId, subId, element) {
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                // ซ่อนเนื้อหาย่อยทั้งหมดในหน้าหลักนั้นก่อน
+                const subItems = targetSection.querySelectorAll('.sub-content-item');
+                subItems.forEach(item => item.classList.remove('active'));
+
+                // แสดงเฉพาะเนื้อหาย่อยที่ตรงกับ ID ที่กด
+                const targetSub = document.getElementById(subId);
+                if (targetSub) {
+                    targetSub.classList.add('active');
+                }
+            }
+
+            // จัดการสถานะ Active ของลิงก์ย่อย
+            const subLinks = document.querySelectorAll('.submenu-list a');
+            subLinks.forEach(link => link.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
