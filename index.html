@@ -128,13 +128,12 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
         }
 
-      .header-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* เปลี่ยนจาก fill เป็น cover */
-            object-position: center; /* จัดรูปให้อยู่กึ่งกลางพอดี */
-            opacity: 0.85;
-        }
+.header-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;       /* บีบรูปให้ยืดหรือหดพอดีกับกรอบ 100% */
+    object-position: center;
+}
 
       /* กล่องคอนเทนต์หลัก ขยายเต็มตา */
         .container {
@@ -403,7 +402,7 @@
         
         <!-- แบนเนอร์รูปภาพด้านบน -->
         <div class="header-banner">
-            <img src="https://i.postimg.cc/yxTxHrDn/pk.png" alt="Banner Header">
+            <img src="https://i.postimg.cc/1zQMz8XZ/9.png" alt="Banner Header">
         </div>
 
         <div class="container">
@@ -437,7 +436,7 @@
             </div>
            
            
-            <!-- เขตพื้นที่ รพ. หมอ -->
+          <!-- เขตพื้นที่ รพ. หมอ -->
 <div id="hospital-zones" class="content-section" >
     <div class="header-section">
         <h2> เขตพื้นที่ รพ. หมอ </h2>
@@ -445,11 +444,11 @@
     
     <!-- ส่วนสำหรับใส่รูปภาพแผนที่/เขตพื้นที่ -->
     <div style="text-align: center; margin-top: 20px;">
-        <img src="https://i.postimg.cc/Hk0XDswk/x-nhim.png" alt="เขตพื้นที่ รพ. หมอ" style="width: 100%; max-width: 800px; border-radius: 8px; border: 2px solid #444; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+        <img src="https://i.postimg.cc/Hk0XDswk/x-nhim.png" alt="เขตพื้นที่ รพ. หมอ" style="width: 100%; max-width: 1300px;object-fit: cover; border-radius: 8px; border: 2px solid #444; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
     </div>
 
     <!-- ข้อความคำอธิบายเพิ่มเติมใต้รูปภาพ (ถ้ามี) -->
-    <ul class="rules-list" style="margin-top: 30px;">
+    <ul class="rules-list" style="margin-top: 50px; text-align: center;">
         <li>
             <strong>หมายเหตุ :</strong> <span class="text-red" style="font-weight: normal;">กรุณาศึกษาและทำความเข้าใจเขตพื้นที่รับผิดชอบและเขตปลอดภัยของโรงพยาบาลอย่างเคร่งครัด</span>
         </li>
