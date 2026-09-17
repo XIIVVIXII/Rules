@@ -282,6 +282,23 @@
                 padding: 25px;
             }
         }
+        /* 1. เคลียร์ค่าเส้นประและขอบเดิมทิ้งก่อน */
+.rules-list > li {
+    position: relative;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: none; /* ปิดอันเก่า */
+}
+
+/* 2. สั่งขีดเส้นประไว้ที่ "ขอบล่างสุด" ของแต่ละข้อหลัก (ครอบคลุมทั้งข้อย่อย บทลงโทษ และหมายเหตุในข้อนั้น) */
+.rules-list > li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: 1px dashed #444; /* เส้นประสีเทาเข้ม */
+}
     </style>
 </head>
 <body>
