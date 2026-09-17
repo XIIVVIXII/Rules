@@ -7,8 +7,8 @@
     <!-- Google Fonts (Chakra Petch) -->
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-              box-sizing: border-box;
+* {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Chakra Petch', sans-serif;
@@ -16,9 +16,10 @@
         body {
             background-color: #0d0d0d;
             color: #e4e4e4;
-            display: flex;
+            display: block; /* เปลี่ยนจาก flex เป็น block เพื่อให้หน้าเว็บขยายตามความยาวเนื้อหาได้อิสระ */
             min-height: 100vh;
             overflow-x: hidden;
+            overflow-y: auto;
         }
 
         /* Sidebar ด้านซ้าย */
@@ -107,12 +108,12 @@
         /* เนื้อหาหลักด้านขวา */
         .main-content {
             margin-left: 300px;
-            flex: 1;
             padding: 40px;
             width: calc(100% - 300px);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            height: auto !important;
+            display: block !important;
+            overflow: visible !important;
         }
 
         /* แบนเนอร์รูปภาพด้านบน */
@@ -127,22 +128,25 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
         }
 
-       .header-banner img {
+      .header-banner img {
             width: 100%;
             height: 100%;
-            object-fit: fill; /* บังคับให้รูปยืดหรือหดเต็มกรอบพอดี */
+            object-fit: cover; /* เปลี่ยนจาก fill เป็น cover */
+            object-position: center; /* จัดรูปให้อยู่กึ่งกลางพอดี */
             opacity: 0.85;
         }
 
-        /* กล่องคอนเทนต์หลัก ขยายเต็มตา */
+      /* กล่องคอนเทนต์หลัก ขยายเต็มตา */
         .container {
-            width: 100%;
-            flex: 1;
+            width: 100% !important;
+            height: auto;
+            min-height: 100%; /* เปลี่ยนจาก auto เป็น 100% เพื่อให้ยืดคลุมเนื้อหาทั้งหมด */
             background: #161616;
             padding: 45px;
             border-radius: 10px;
             border: 1px solid #242424;
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            overflow: visible !important;
         }
 
         .content-section {
@@ -197,7 +201,93 @@
             color: #ff0000;
             font-weight: normal;
         }
-        /* 1. เคลียร์ค่าเส้นประและขอบเดิมทิ้งก่อน */
+
+        /* สไตล์สำหรับพื้นที่สีแดงแบบ Dark Mode (เข้ากับเว็บ) */
+        .area-red-badge {
+            color: #ff4d4d;
+            background-color: rgba(255, 0, 0, 0.15);
+            border: 1px solid #ff4d4d;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .text-bold-dark {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .penalty-indent {
+            display: block;
+            margin-left: 22px;
+            margin-top: 4px;
+        }
+
+        .note-box {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-left: 4px solid #ff3333;
+            border-radius: 4px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #cccccc;
+        }
+
+        .hospital-notice {
+            margin-top: 40px;
+            padding: 22px;
+            background-color: #1c1c1c;
+            border: 1px solid #333;
+            border-left: 5px solid #ff0000;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .notice-black {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .notice-red {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff0000;
+            display: block;
+            line-height: 1.6;
+        }
+
+        @media(max-width: 992px) {
+            body {
+                flex-direction: column;
+            }
+            sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #222;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            .header-banner {
+                height: 150px;
+            }
+            .container {
+                padding: 25px;
+            }
+        }
+
+       /* 1. เคลียร์ค่าเส้นประและขอบเดิมทิ้งก่อน */
 .rules-list > li {
     position: relative;
     margin-bottom: 25px;
@@ -214,7 +304,8 @@
     bottom: 0;
     border-bottom: 1px dashed #444; /* เส้นประสีเทาเข้ม */
 }
-        .sub-content-item .sub-header {
+
+.sub-content-item .sub-header {
     font-size: 25px;               /* ขนาดตัวหนังสือพอดีตา */
     font-weight: bold;             /* ตัวหนา */
     color: #ffffff;                /* ตัวหนังสือสีขาว */
@@ -312,7 +403,7 @@
         
         <!-- แบนเนอร์รูปภาพด้านบน -->
         <div class="header-banner">
-            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1600&auto=format&fit=crop" alt="Banner Header">
+            <img src="https://i.postimg.cc/yxTxHrDn/pk.png" alt="Banner Header">
         </div>
 
         <div class="container">
@@ -807,7 +898,7 @@
         <li>
             <strong>5.</strong> เคสสตอรี่เถื่อน / ทะเลาะวิวาท ช่วงเวลาที่สภาปิดทำการ จะต้องให้ผู้สลบกับแพทย์ทุกกรณี 
             <div class="penalty-indent text-red">บทลงโทษ : ผิดกฏประเทศ</div>
-            </div>
+           
         </li>
 </div>
 
@@ -874,14 +965,12 @@
             
             <div class="note-box" style="border-left-color: #ff0000; background-color: #1f1414; font-size: 22px; padding: 18px; line-height: 1.8; margin-top: 8px;">
                 <strong>เงื่อนไข:</strong> ห้ามโต้แย้งเพื่อเปลี่ยนคำตัดสิน หากฝ่าฝืนจะเพิ่มโทษขั้นเด็ดขาดทันที ยกเว้นกรณีที่ผู้ถูก Blacklist ไม่ได้กระทำความผิดนั้นๆ จริง จะสามารถส่งหลักฐานที่ชัดเจนโดยใช้ Overlay เพื่อโต้แย้งได้ และหากพิสูจน์แล้วว่า ผู้ถูก Blacklist ไม่ได้กระทำผิดจริง แพทย์ที่ทำการ Blacklist จะต้องรับผิดชอบโดยการโดนลงโทษวินัย
-              </li>
-    </ul> </div>
-            <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
-                   การ Blacklist แพทย์สามารถใช้ได้เพียงหลักฐาน IC เท่านั้น เช่น สายตาของแพทย์, หูของแพทย์ หรือภาพถ่ายมาจาก F12 และภาพจาก Instarpic
-แพทย์จะไม่สามารถนำหลักฐาน OC มา Blacklist และจะไม่สามารถ Blacklist ย้อนหลังได้เกิน 30 นาที หลังจากเวลาเกิดเหตุ
+            </div>
+ </li> </ul>
+               <div style="font-size: 30px; font-weight: bold; color: #ff4d4d; text-align: center; margin-top: 25px; line-height: 1.6;">
+การ Blacklist แพทย์สามารถใช้ได้เพียงหลักฐาน IC เท่านั้น เช่น สายตาของแพทย์, หูของแพทย์ หรือภาพถ่ายมาจาก F12 และภาพจาก Instarpic แพทย์จะไม่สามารถนำหลักฐาน OC มา Blacklist และจะไม่สามารถ Blacklist ย้อนหลังได้เกิน 30 นาที หลังจากเวลาเกิดเหตุ
 หากไม่ทำการเคลียร์ Blacklist ภายใน 24 ชั่วโมง อ้างอิงจากเวลาที่ทำการประกาศครั้งแรก แพทย์จะเพิ่มค่า Blacklist เป็น x4
-                </div>
-      
+ </div>    
 </div>
 
 <!-- 6. กฎ Blacklist -->
