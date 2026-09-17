@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
-            box-sizing: border-box;
+              box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Chakra Petch', sans-serif;
@@ -127,10 +127,10 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
         }
 
-        .header-banner img {
+       .header-banner img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: fill; /* บังคับให้รูปยืดหรือหดเต็มกรอบพอดี */
             opacity: 0.85;
         }
 
@@ -196,91 +196,6 @@
         .text-red {
             color: #ff0000;
             font-weight: normal;
-        }
-
-        /* สไตล์สำหรับพื้นที่สีแดงแบบ Dark Mode (เข้ากับเว็บ) */
-        .area-red-badge {
-            color: #ff4d4d;
-            background-color: rgba(255, 0, 0, 0.15);
-            border: 1px solid #ff4d4d;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .text-bold-dark {
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        .penalty-indent {
-            display: block;
-            margin-left: 22px;
-            margin-top: 4px;
-        }
-
-        .note-box {
-            margin-top: 15px;
-            margin-bottom: 15px;
-            padding: 15px;
-            background-color: #1a1a1a;
-            border-left: 4px solid #ff3333;
-            border-radius: 4px;
-            font-size: 15px;
-            line-height: 1.6;
-            color: #cccccc;
-        }
-
-        .hospital-notice {
-            margin-top: 40px;
-            padding: 22px;
-            background-color: #1c1c1c;
-            border: 1px solid #333;
-            border-left: 5px solid #ff0000;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .notice-black {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ffffff;
-            display: block;
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .notice-red {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ff0000;
-            display: block;
-            line-height: 1.6;
-        }
-
-        @media(max-width: 992px) {
-            body {
-                flex-direction: column;
-            }
-            sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                border-right: none;
-                border-bottom: 1px solid #222;
-            }
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-                padding: 20px;
-            }
-            .header-banner {
-                height: 150px;
-            }
-            .container {
-                padding: 25px;
-            }
         }
         /* 1. เคลียร์ค่าเส้นประและขอบเดิมทิ้งก่อน */
 .rules-list > li {
